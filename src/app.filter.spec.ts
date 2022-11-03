@@ -1,7 +1,13 @@
-import { AppFilter } from './app.filter';
+import { SystemExceptionFilter, HttpExceptionFilter} from './app.filter';
 
-describe('AppFilter', () => {
+describe('SystemEceptionFilter', () => {
   it('should be defined', () => {
-    expect(new AppFilter()).toBeDefined();
+    expect(new SystemExceptionFilter()).toBeDefined();
+  });
+});
+
+describe('HttpEceptionFilter', () => {
+  it('should be defined', () => {
+    expect(new HttpExceptionFilter()).toBeDefined();
   });
 });
