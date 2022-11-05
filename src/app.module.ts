@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductModule } from './product/product.module';
+import { AutomapperModule } from "@automapper/nestjs";
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
@@ -17,6 +19,9 @@ import { ProductModule } from './product/product.module';
       entities: [],
       synchronize: true,
     }),
+    AutomapperModule.forRoot(
+      { strategyInitializer: classes() }
+    )
   ],
   controllers: [AppController],
   providers: [AppService],
