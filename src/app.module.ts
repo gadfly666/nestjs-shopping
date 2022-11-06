@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ProductModule } from './product/product.module';
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from '@automapper/classes';
+import { GiftCardModule } from './gift_card/gift_card.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { classes } from '@automapper/classes';
     }),
     AutomapperModule.forRoot(
       { strategyInitializer: classes() }
-    )
+    ),
+    GiftCardModule
   ],
   controllers: [AppController],
   providers: [AppService],
