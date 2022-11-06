@@ -6,23 +6,27 @@ import { ProductModule } from './product/product.module';
 import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from '@automapper/classes';
 import { GiftCardModule } from './gift_card/gift_card.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './app.configuration';
 
 @Module({
   imports: [
     ProductModule, 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'root',
-      password: 'root',
-      database: 'shopping',
-      entities: [],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService) => ({
+        ...config.get<any>('database'),
+        entities: [],
+        synchronize: true,
+      }),
+      inject: [ConfigService]
     }),
     AutomapperModule.forRoot(
       { strategyInitializer: classes() }
     ),
+    ConfigModule.forRoot({
+      load: [configuration]
+    }),
     GiftCardModule
   ],
   controllers: [AppController],
