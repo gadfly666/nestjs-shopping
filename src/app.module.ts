@@ -7,6 +7,8 @@ import { AutomapperModule } from "@automapper/nestjs";
 import { classes } from '@automapper/classes';
 import { GiftCardModule } from './gift_card/gift_card.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CollectionModule } from './collection/collection.module';
+import { CustomerModule } from './customer/customer.module';
 import configuration from './app.configuration';
 
 @Module({
@@ -27,7 +29,9 @@ import configuration from './app.configuration';
     ConfigModule.forRoot({
       load: [configuration]
     }),
-    GiftCardModule
+    GiftCardModule,
+    CollectionModule,
+    CustomerModule
   ],
   controllers: [AppController],
   providers: [AppService],
