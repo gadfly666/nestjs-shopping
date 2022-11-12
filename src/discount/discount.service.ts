@@ -11,7 +11,7 @@ export class DiscountService {
 
   constructor(
     @InjectRepository(Discount)
-    private customerRepository: Repository<DiscountDto>,
+    private customerRepository: Repository<Discount>,
     @InjectMapper()
     private mapper: Mapper,
   ) {}
@@ -34,7 +34,7 @@ export class DiscountService {
     }
 
     throw new NotFoundException({
-      "customerId": id
+      "entityId": id
     });
   }
 
@@ -52,7 +52,7 @@ export class DiscountService {
     }
 
     throw new NotFoundException({
-      "customerId": id
+      "entityId": id
     });
   }
   
