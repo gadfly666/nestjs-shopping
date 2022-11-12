@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "customers"})
-export class GiftCard {
+export class Customer extends AbstractEntity {
   @PrimaryGeneratedColumn()
   @Column({name: "id"})
   id: bigint;
@@ -19,8 +20,4 @@ export class GiftCard {
   phone: string;
   @Column({name: "has_account"})
   hasAccount: boolean;
-  @Column({name: "created_at"})
-  createdAt: Date;
-  @Column({name: "updated_at"})
-  updatedAt: Date;
 }

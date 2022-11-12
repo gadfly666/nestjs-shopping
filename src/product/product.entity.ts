@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "products"})
-export class Product {
+export class Product extends AbstractEntity {
   @PrimaryGeneratedColumn()
   id: bigint;
   @Column({name: "title"})
@@ -34,10 +35,6 @@ export class Product {
   status: string;
   @Column({name: "external_id"})
   externalId: string;
-  @Column({name: "created_at"})
-  createdAt: Date;
-  @Column({name: "updated_at"})
-  updatedAt: Date;
-  @Column({name: "title"})
+  @Column({name: "deleted_at"})
   deletedAt: Date; 
 }

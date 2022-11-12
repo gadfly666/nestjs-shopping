@@ -9,6 +9,10 @@ import { GiftCardModule } from './gift_card/gift_card.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CollectionModule } from './collection/collection.module';
 import { CustomerModule } from './customer/customer.module';
+import { CustomerGroupModule } from './customer_group/customer_group.module';
+import { DiscountController } from './discount/discount.controller';
+import { DiscountModule } from './discount/discount.module';
+import { DiscountConditionModule } from './discount_condition/discount_condition.module';
 import configuration from './app.configuration';
 
 @Module({
@@ -31,9 +35,12 @@ import configuration from './app.configuration';
     }),
     GiftCardModule,
     CollectionModule,
-    CustomerModule
+    CustomerModule,
+    CustomerGroupModule,
+    DiscountModule,
+    DiscountConditionModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, DiscountController],
   providers: [AppService],
 })
 export class AppModule {}
