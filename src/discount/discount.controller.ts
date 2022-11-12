@@ -4,27 +4,31 @@ import { DiscountDto } from './discount.dto';
 import { Response } from 'express';
 
 @Controller('discount')
-export class DiscountController {constructor( 
-  @Inject() private service: DiscountService,
-) {}  
+export class DiscountController {
+  
+  constructor( 
+    @Inject() private service: DiscountService,
+  ) {}  
 
-@Post()
-create(@Body() dto: DiscountDto): DiscountDto {
-  return this.service.create(dto);
+  @Post()
+  create(@Body() dto: DiscountDto): DiscountDto {
+    return this.service.create(dto);
+  }
+
+  @Get(':id')
+  async retrieve(@Param('id') id: bigint): Promise<DiscountDto> {
+    return await this.service.retrieve(id);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: bigint, @Body() dto: DiscountDto): Promise<DiscountDto> {
+    return await this.service.update(id, dto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: bigint, @Res() res: Response) {
+    await this.service.delete(id);
+    res.status(HttpStatus.OK).json({"message": "success"});
+  }
+
 }
-
-@Get(':id')
-async retrieve(@Param('id') id: bigint): Promise<DiscountDto> {
-  return await this.service.retrieve(id);
-}
-
-@Put(':id')
-async update(@Param('id') id: bigint, @Body() dto: DiscountDto): Promise<DiscountDto> {
-  return await this.service.update(id, dto);
-}
-
-@Delete(':id')
-async delete(@Param('id') id: bigint, @Res() res: Response) {
-  await this.service.delete(id);
-  res.status(HttpStatus.OK).json({"message": "success"});
-}}
