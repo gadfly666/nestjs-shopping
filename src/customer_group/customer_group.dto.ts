@@ -1,11 +1,6 @@
-export class CustomerDTO {
+export class CustomerGroupDto {
   id: bigint;
-  email: string;
-  firstName: string;
-  lastName: string;
-  billingAddressId: bigint;
-  passwordHash: string;
-  hasAccount: boolean;
+  name: string;
   createdAt: Date;
   updatedAt: Date; 
 }

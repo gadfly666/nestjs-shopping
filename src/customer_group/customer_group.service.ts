@@ -1,28 +1,28 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Discount } from './discount.entity';
-import { DiscountDto } from './discount.dto';
+import { CustomerGroup } from './customer_group.entity';
+import { CustomerGroupDto } from './customer_group.dto';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 
 @Injectable()
-export class DiscountService {
+export class CustomerGroupService {
 
   constructor(
-    @InjectRepository(Discount)
-    private customerRepository: Repository<DiscountDto>,
+    @InjectRepository(CustomerGroup)
+    private customerRepository: Repository<CustomerGroup>,
     @InjectMapper()
     private mapper: Mapper,
   ) {}
 
-  create(dto: DiscountDto): DiscountDto{
-    const entity = this.mapper.map(dto, DiscountDto, Discount);
+  create(dto: CustomerGroupDto): CustomerGroupDto{
+    const entity = this.mapper.map(dto, CustomerGroupDto, CustomerGroup);
     this.customerRepository.save(entity);
-    return this.mapper.map(entity, Discount, DiscountDto);
+    return this.mapper.map(entity, CustomerGroup, CustomerGroupDto);
   }
 
-  async retrieve(id: bigint): Promise<DiscountDto> {
+  async retrieve(id: bigint): Promise<CustomerGroupDto> {
     const entity = await this.customerRepository.findOne({
       where: {
         "id": id
@@ -30,7 +30,7 @@ export class DiscountService {
     })
 
     if (entity) {
-      return this.mapper.map(entity, Discount, DiscountDto);
+      return this.mapper.map(entity, CustomerGroup, CustomerGroupDto);
     }
 
     throw new NotFoundException({
@@ -38,7 +38,7 @@ export class DiscountService {
     });
   }
 
-  async update(id: bigint, dto: DiscountDto): Promise<DiscountDto> {
+  async update(id: bigint, dto: CustomerGroupDto): Promise<CustomerGroupDto> {
     const entity = await this.customerRepository.findOne({
       where: {
         "id": id
@@ -46,9 +46,9 @@ export class DiscountService {
     })
 
     if (entity) {
-      this.mapper.mutate(dto, entity, DiscountDto, Discount);
+      this.mapper.mutate(dto, entity, CustomerGroupDto, CustomerGroup);
       this.customerRepository.save(entity);
-      return this.mapper.map(entity, Discount, DiscountDto);
+      return this.mapper.map(entity, CustomerGroup, CustomerGroupDto);
     }
 
     throw new NotFoundException({
