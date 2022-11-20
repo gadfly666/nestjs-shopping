@@ -65,7 +65,7 @@ export class CustomerService {
     })
 
     if (customer) {
-      this.customerRepository.delete(giftCard);
+      this.customerRepository.delete(customer);
     }
 
   }

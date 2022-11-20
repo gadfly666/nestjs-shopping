@@ -13,6 +13,7 @@ import { CustomerGroupModule } from './customer_group/customer_group.module';
 import { DiscountController } from './discount/discount.controller';
 import { DiscountModule } from './discount/discount.module';
 import { DiscountConditionModule } from './discount_condition/discount_condition.module';
+import { UserModule } from './user/user.module';
 import configuration from './app.configuration';
 
 @Module({
@@ -38,7 +39,8 @@ import configuration from './app.configuration';
     CustomerModule,
     CustomerGroupModule,
     DiscountModule,
-    DiscountConditionModule
+    DiscountConditionModule,
+    UserModule
   ],
   controllers: [AppController, DiscountController],
   providers: [AppService],
