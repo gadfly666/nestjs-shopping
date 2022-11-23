@@ -1,8 +1,6 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
 import { User, UserLoginSession } from '../user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -15,9 +13,6 @@ export class AuthService {
     private userRepository: Repository<User>,
     @InjectRepository(UserLoginSession)
     private userLoginSessionRepository: Repository<UserLoginSession>,
-    @InjectMapper()
-    private mapper: Mapper,
-    @Inject()
     private jwtService: JwtService,
   ) {}
 
