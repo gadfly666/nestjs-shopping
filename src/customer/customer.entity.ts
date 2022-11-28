@@ -3,8 +3,7 @@ import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "customers"})
 export class Customer extends AbstractEntity {
-  @PrimaryGeneratedColumn()
-  @Column({name: "id"})
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
   @Column({name: "email"})
   email: string;
@@ -12,7 +11,7 @@ export class Customer extends AbstractEntity {
   firstName: string;
   @Column({name: "last_name"})
   lastName: string;
-  @Column({name: "billing_address_id"})
+  @Column({name: "billing_address_id", type: 'bigint'})
   billingAddressId: bigint;
   @Column({name: "password_hash"})
   passwordHash: string;

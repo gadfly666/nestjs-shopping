@@ -6,7 +6,6 @@ import { AuthService } from './auth.service';
 export class AuthController {
 
   constructor(
-    @Inject()
     private service: AuthService,
   ){}
 

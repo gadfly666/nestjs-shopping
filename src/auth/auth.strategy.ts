@@ -7,7 +7,6 @@ import { User } from '../user/user.entity';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject()
     private authService: AuthService
   ) {
     super();

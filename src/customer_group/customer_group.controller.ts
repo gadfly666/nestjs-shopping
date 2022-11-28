@@ -6,7 +6,7 @@ import { Response } from 'express';
 @Controller('customer-group')
 export class CustomerGroupController {
   constructor( 
-    @Inject() private service: CustomerGroupService,
+    private service: CustomerGroupService,
   ) {}  
 
   @Post()

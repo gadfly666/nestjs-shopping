@@ -7,7 +7,7 @@ import { Response } from 'express';
 export class DiscountController {
   
   constructor( 
-    @Inject() private service: DiscountService,
+    private service: DiscountService,
   ) {}  
 
   @Post()

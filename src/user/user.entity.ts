@@ -3,10 +3,9 @@ import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "users"})
 export class User extends AbstractEntity {
-  @PrimaryGeneratedColumn()
-  @Column({name: "id"})
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
-  @Column({name: "id"})
+  @Column({name: "email"})
   email: string;
   @Column({name: "first_name"})
   firstName: string;
@@ -21,12 +20,11 @@ export class User extends AbstractEntity {
 @Entity({name: "user_login_sessions"})
 export class UserLoginSession extends AbstractEntity {
 
-  @PrimaryGeneratedColumn()
-  @Column({name: "id"})
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
   @Column({name: "uuid"})
   uuid: string;
-  @Column({name: "user_id"})
+  @Column({name: "user_id", type: "bigint"})
   userId: bigint;
 
 }

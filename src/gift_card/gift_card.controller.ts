@@ -7,7 +7,7 @@ import { GiftCardService } from './gift_card.service';
 export class GiftCardController {
 
   constructor( 
-    @Inject() private service: GiftCardService,
+    private service: GiftCardService,
   ) {}  
 
   @Post()

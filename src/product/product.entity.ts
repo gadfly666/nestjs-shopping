@@ -3,7 +3,7 @@ import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "products"})
 export class Product extends AbstractEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
   @Column({name: "title"})
   title: string;
@@ -15,11 +15,11 @@ export class Product extends AbstractEntity {
   thumbnail: string;
   @Column({name: "profile_id"})
   profileId: string;
-  @Column({name: "weight"})
+  @Column({name: "weight", type:'bigint'})
   weight: bigint;
-  @Column({name: "height"})
+  @Column({name: "height", type: 'bigint'})
   height: bigint;
-  @Column({name: "width"})
+  @Column({name: "width", type: 'bigint'})
   width: bigint;
   @Column({name: "hs_code"})
   hsCode: string;

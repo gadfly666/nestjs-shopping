@@ -3,18 +3,17 @@ import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "discounts"})
 export class Discount extends AbstractEntity {
-  @PrimaryGeneratedColumn()
-  @Column({name: "id"})
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
   @Column({name: "code"})
   code: string;
   @Column({name: "is_dynamic"})
   isDynamic: boolean;
-  @Column({name: "rule_id"})
+  @Column({name: "rule_id", type: "bigint"})
   ruleId: bigint;
   @Column({name: "is_disabled"})
   isDisabled: boolean;
-  @Column({name: "parent_discount_id"})
+  @Column({name: "parent_discount_id", type: "bigint"})
   parentDiscountId: bigint;
   @Column({name: "starts_at"})
   startsAt: Date;

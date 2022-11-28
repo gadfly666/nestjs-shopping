@@ -3,8 +3,7 @@ import { AbstractEntity } from "../app.entity";
 
 @Entity({name: "product_collections"})
 export class Collection extends AbstractEntity {
-  @PrimaryGeneratedColumn()
-  @Column({name: "id"})
+  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
   @Column({name: "title"})
   title: string;
