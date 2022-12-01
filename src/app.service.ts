@@ -15,7 +15,7 @@ export class LoggingService {
 
   constructor() {
     const logger = winston.createLogger({
-      level: process.env.LOG_LEVEL || 'info',
+      level: 'error',
       format: winston.format.json(),
       transports: [
         new winston.transports.Console(),

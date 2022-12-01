@@ -1,12 +1,16 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
+import { LoggingService } from './app.service';
 
-@Catch(HttpException)
-class HttpExceptionFilter implements ExceptionFilter<HttpException> {
-  catch(exception: HttpException, host: ArgumentsHost) {
+@Catch()
+class SystemExceptionFilter implements ExceptionFilter {
+
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
 
-    ctx.getResponse<Response>()
+
+    if (exception instanceof HttpException) {
+      ctx.getResponse<Response>()
       .status(exception.getStatus())
       .json({
         statusCode: exception.getStatus(),
@@ -14,26 +18,21 @@ class HttpExceptionFilter implements ExceptionFilter<HttpException> {
         timestamp: new Date().toISOString(),
         path: ctx.getRequest<Request>().url,
       });
-  }
-}
+      return;
+    } 
 
-@Catch()
-class SystemExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-
+    console.log(`Exceptions: ${exception}`)
     ctx.getResponse<Response>()
       .status(HttpStatus.INTERNAL_SERVER_ERROR)
       .json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         error: "Internal Server Error",
         timestamp: new Date().toISOString(),
-        path: ctx.getRequest<Request>(),
+        path: ctx.getRequest<Request>().url,
       });
   }
 }
 
 export {
-  HttpExceptionFilter,
   SystemExceptionFilter
 }

@@ -1,11 +1,13 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import { Strategy as PassportLocalStrategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Inject, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { User } from '../user/user.entity';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(PassportLocalStrategy) {
+
   constructor(
     private authService: AuthService
   ) {
@@ -27,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: "Very Secret",
+      secretOrKey: "111111111111",
     });
   }
 
