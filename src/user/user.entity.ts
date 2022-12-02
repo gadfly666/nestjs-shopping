@@ -1,6 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
+export enum UserRole {
+  ADMIN = "admin",
+  CUSTOMER = "customer",
+  ANONYMOUS = "anonymous"
+}
+
 @Entity({name: "users"})
 export class User extends AbstractEntity {
   @PrimaryGeneratedColumn({name: "id",type: "bigint"})
@@ -15,6 +21,13 @@ export class User extends AbstractEntity {
   username: string;
   @Column({name: "password_hash"})
   passwordHash: string;
+  @Column({
+    name: "role",
+    type: "enum",
+    enum: UserRole,
+    default: UserRole.ANONYMOUS
+  })
+  role: UserRole;
 }
 
 @Entity({name: "user_login_sessions"})

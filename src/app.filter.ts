@@ -1,13 +1,18 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Response } from 'express';
-import { LoggingService } from './app.service';
+// import { Logger } from 'winston';
+// import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Catch()
 class SystemExceptionFilter implements ExceptionFilter {
 
+  constructor(
+    // @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger
+    private readonly logger: Logger
+  ) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-
 
     if (exception instanceof HttpException) {
       ctx.getResponse<Response>()
@@ -21,7 +26,7 @@ class SystemExceptionFilter implements ExceptionFilter {
       return;
     } 
 
-    console.log(`Exceptions: ${exception}`)
+    this.logger.error(`Exceptions: ${exception}`)
     ctx.getResponse<Response>()
       .status(HttpStatus.INTERNAL_SERVER_ERROR)
       .json({

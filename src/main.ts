@@ -1,16 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SystemExceptionFilter } from "./app.filter";
-import { LoggingService } from './app.service';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+// import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
+
   const app = await NestFactory.create(AppModule);
-  const loggingService = app.get(LoggingService);
+
   app.useGlobalFilters(
-    new SystemExceptionFilter()
+    app.get(SystemExceptionFilter)
   );
-  app.useLogger(loggingService.getLogger())
+
+  // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
   
   const config = new DocumentBuilder()
     .setTitle('Shooping Admin API')

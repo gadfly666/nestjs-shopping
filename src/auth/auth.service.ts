@@ -27,8 +27,28 @@ export class AuthService {
     if (user && bcrypt.compare(password, user.passwordHash)) {
       return user;
     }
+
     return null;
 
+  }
+
+  async validateUserLoginSession(payload: any) {
+    const uuid = payload.sub
+    const session = await this.userLoginSessionRepository.findOne({
+      where: {
+        "uuid": uuid
+      }
+    })
+
+    if (!session) {
+      return null;
+    }
+
+    return await this.userRepository.findOne({
+      where: {
+        "id": session.userId
+      }
+    })
   }
 
   async login(user: User): Promise<any> {
@@ -40,7 +60,7 @@ export class AuthService {
     session = await this.userLoginSessionRepository.save(session)
 
     return {
-      access_token: this.jwtService.sign(session),
+      access_token: this.jwtService.sign({sub: session.uuid}),
     };
   }
 
