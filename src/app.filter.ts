@@ -15,11 +15,12 @@ class SystemExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
 
     if (exception instanceof HttpException) {
+      const response = (exception.getResponse() instanceof Object) ? <Object> exception.getResponse() : {statusCode: exception.getStatus(), message: exception.message} 
+
       ctx.getResponse<Response>()
       .status(exception.getStatus())
       .json({
-        statusCode: exception.getStatus(),
-        error: exception.message,
+        ...response,
         timestamp: new Date().toISOString(),
         path: ctx.getRequest<Request>().url,
       });

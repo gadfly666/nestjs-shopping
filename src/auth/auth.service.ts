@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserLoginSession } from '../user/user.entity';
@@ -63,6 +63,5 @@ export class AuthService {
       access_token: this.jwtService.sign({sub: session.uuid}),
     };
   }
-
 
 }
