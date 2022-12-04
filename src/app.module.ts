@@ -26,6 +26,8 @@ const DatabaseModule = TypeOrmModule.forRoot({
   password: process.env.DATABASE_PASSWORD || 'postgres',
   database: process.env.DATABASE || 'shopping',
   autoLoadEntities: true,
+  // TODO disable on production
+  synchronize: true,
 })
 
 @Module({

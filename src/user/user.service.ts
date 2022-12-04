@@ -1,6 +1,6 @@
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RegisterDto } from './user.dto';
@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
+
+    private readonly logger: Logger = new Logger(UserService.name)
 
     constructor(
     @InjectRepository(User)
@@ -19,7 +21,7 @@ export class UserService {
 
     async register(dto: RegisterDto): Promise<void> {
 
-        var user = await this.repository.findOne({
+        var user: User = await this.repository.findOne({
           where: {
             "username": dto.username,
           }
@@ -30,6 +32,7 @@ export class UserService {
         }
 
         user = this.mapper.map(dto, RegisterDto, User);
+        this.logger.log(`Mapped user ${JSON.stringify(user)}`);
         // TODO rethink about anonymous and customer role
         user.role = UserRole.ANONYMOUS
 

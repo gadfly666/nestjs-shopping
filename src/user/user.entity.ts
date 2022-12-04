@@ -1,3 +1,4 @@
+import { AutoMap } from "@automapper/classes";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
@@ -9,18 +10,24 @@ export enum UserRole {
 
 @Entity({name: "users"})
 export class User extends AbstractEntity {
+  @AutoMap()
   @PrimaryGeneratedColumn({name: "id",type: "bigint"})
   id: bigint;
-  @Column({name: "email"})
+  @AutoMap()
+  @Column({name: "email", nullable:true})
   email: string;
-  @Column({name: "first_name"})
+  @AutoMap()
+  @Column({name: "first_name", nullable:true})
   firstName: string;
-  @Column({name: "last_name"})
+  @AutoMap()
+  @Column({name: "last_name", nullable:true})
   lastName: string;
+  @AutoMap()
   @Column({name: "username"})
   username: string;
   @Column({name: "password_hash"})
   passwordHash: string;
+  @AutoMap()
   @Column({
     name: "role",
     type: "enum",

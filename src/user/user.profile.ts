@@ -5,7 +5,7 @@ import { RegisterDto } from './user.dto';
 import { User } from './user.entity';
 
 @Injectable()
-export class CustomerProfile extends AutomapperProfile {
+export class UserProfile extends AutomapperProfile {
 
   constructor(@InjectMapper() mapper: Mapper){
     super(mapper);
