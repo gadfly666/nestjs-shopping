@@ -2,7 +2,7 @@
 
 ## Description
 
-Admin shopping service deveploed in nestjs.
+Admin shopping service deveploped in nestjs.
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
