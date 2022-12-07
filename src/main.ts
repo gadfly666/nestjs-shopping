@@ -8,22 +8,24 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
+  const contextPath = '/admin/api'
 
   app.useGlobalFilters(
     app.get(SystemExceptionFilter)
   );
+  app.setGlobalPrefix(contextPath)
+  app.useGlobalPipes(new ValidationPipe({skipUndefinedProperties: true}))
 
   // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER))
-  
   const config = new DocumentBuilder()
     .setTitle('Shooping Admin API')
     .setDescription('')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/docs', app, document);
-
-  app.useGlobalPipes(new ValidationPipe({skipUndefinedProperties: true}))
 
   await app.listen(3000);
 }
