@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from './product.entity';
+import { Product, ProductStatus } from './product.entity';
 import { ProductDto } from './product.dto';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
@@ -14,11 +14,12 @@ export class ProductService {
     private productRepository: Repository<Product>,
     @InjectMapper()
     private mapper: Mapper,
+    private readonly logger: Logger,
   ) {}
 
-  create(dto: ProductDto): ProductDto {
+  async create(dto: ProductDto): Promise<ProductDto> {
     const product = this.mapper.map(dto, ProductDto, Product);
-    this.productRepository.save(product);
+    await this.productRepository.save(product);
     return this.mapper.map(product, Product, ProductDto);
   }
 
@@ -27,15 +28,16 @@ export class ProductService {
       where: {
         "id": id
       }
-    })
+    });
 
-    if (product) {
-      return this.mapper.map(product, Product, ProductDto);
+
+    if (!product) {
+      throw new NotFoundException({
+        "productId": id
+      });
     }
 
-    throw new NotFoundException({
-      "productId": id
-    });
+    return this.mapper.map(product, Product, ProductDto);
   }
 
   async update(id: bigint, dto: ProductDto): Promise<ProductDto> {
@@ -65,7 +67,9 @@ export class ProductService {
     })
 
     if (product) {
-      this.productRepository.delete(product);
+      product.status = ProductStatus.DELTED;
+      product.deletedAt = new Date();
+      await this.productRepository.save(product);
     }
 
   }

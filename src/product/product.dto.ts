@@ -1,40 +1,60 @@
+import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
+import { ProductStatus } from "./product.entity";
 
 export class ProductDto {
+  @AutoMap()
+  @ApiProperty({required: false})
+  id: bigint
+  @AutoMap()
   @ApiProperty()
   title: string;
+  @AutoMap()
   @ApiProperty()
   subtitle: string;
+  @AutoMap()
   @ApiProperty()
-  decription: string;
+  description: string;
+  @AutoMap()
   @ApiProperty()
   thumbnail: string;
+  @AutoMap()
   @ApiProperty()
-  profile_id: string;
+  profileId: string;
+  @AutoMap()
   @ApiProperty()
   weight: bigint;
+  @AutoMap()
   @ApiProperty()
   height: bigint;
+  @AutoMap()
   @ApiProperty()
   width: bigint;
+  @AutoMap()
   @ApiProperty()
-  hs_code: string;
+  hsCode: string;
+  @AutoMap()
   @ApiProperty()
-  mid_code: string;
+  midCode: string;
+  @AutoMap()
   @ApiProperty()
   material: string;
+  @AutoMap()
   @ApiProperty()
-  collection_id: string;
+  collectionId: string;
+  @AutoMap()
   @ApiProperty()
-  type_id: string;
+  typeId: string;
+  @AutoMap()
+  @ApiProperty({enum: ProductStatus, default: ProductStatus.DRAFT})
+  status: ProductStatus;
+  @AutoMap()
   @ApiProperty()
-  status: string;
+  createdAt: Date;
+  @AutoMap()
   @ApiProperty()
-  external_id: string;
+  updatedAt: Date;
+  @AutoMap()
   @ApiProperty()
-  created_at: Date;
-  @ApiProperty()
-  updated_at: Date;
-  @ApiProperty()
-  deleted_at: Date; 
+  deletedAt: Date; 
 }

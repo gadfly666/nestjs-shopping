@@ -13,7 +13,7 @@ export class ProductController {
 
   @ApiOkResponse({type: ProductDto})
   @Post()
-  create(@Body() dto: ProductDto): ProductDto {
+  async create(@Body() dto: ProductDto): Promise<ProductDto> {
     return this.service.create(dto);
   }
 

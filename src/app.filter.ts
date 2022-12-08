@@ -13,6 +13,7 @@ class SystemExceptionFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+    this.logger.error(`Exceptions: ${exception}`)
 
     if (exception instanceof HttpException) {
       const response = (exception.getResponse() instanceof Object) ? <Object> exception.getResponse() : {statusCode: exception.getStatus(), message: exception.message} 
@@ -27,7 +28,6 @@ class SystemExceptionFilter implements ExceptionFilter {
       return;
     } 
 
-    this.logger.error(`Exceptions: ${exception}`)
     ctx.getResponse<Response>()
       .status(HttpStatus.INTERNAL_SERVER_ERROR)
       .json({

@@ -1,40 +1,73 @@
+import { AutoMap } from "@automapper/classes";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
+// TODO archive table instead of status
+export enum ProductStatus {
+  DRAFT = "draft",
+  PROPOSED = "proposed",
+  PUBLISHED = "published",
+  REJECTED = "rejected",
+  DELTED = "deleted",
+}
+
 @Entity({name: "products"})
 export class Product extends AbstractEntity {
-  @PrimaryGeneratedColumn({name: "id",type: "bigint"})
+  @AutoMap()
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
   id: bigint;
-  @Column({name: "title"})
+  @AutoMap()
+  @Column({name: "title", nullable: true})
   title: string;
-  @Column({name: "subtitle"})
+  @AutoMap()
+  @Column({name: "subtitle", nullable: true})
   subtitle: string;
-  @Column({name: "description"})
+  @AutoMap()
+  @Column({name: "description", nullable: true})
   description: string;
+  @AutoMap()
   @Column({name: "thumbnail"})
   thumbnail: string;
-  @Column({name: "profile_id"})
+  @AutoMap()
+  @Column({name: "profile_id", nullable: true})
+  // ID of the shipping profile that the product belong tos
   profileId: string;
+  @AutoMap()
   @Column({name: "weight", type:'bigint'})
   weight: bigint;
+  @AutoMap()
   @Column({name: "height", type: 'bigint'})
   height: bigint;
+  @AutoMap()
   @Column({name: "width", type: 'bigint'})
   width: bigint;
-  @Column({name: "hs_code"})
+  @AutoMap()
+  @Column({name: "hs_code", nullable: true})
   hsCode: string;
-  @Column({name: "mid_code"})
+  @AutoMap()
+  @Column({name: "mid_code", nullable: true})
   midCode: string;
-  @Column({name: "material"})
+  @AutoMap()
+  @Column({name: "material", nullable: true})
   material: string;
-  @Column({name: "collection_id"})
+  @AutoMap()
+  @Column({name: "collection_id", nullable: true})
   collectionId: string;
-  @Column({name: "type_id"})
+  @AutoMap()
+  @Column({name: "type_id", nullable: true})
   typeId: string;
-  @Column({name: "status"})
-  status: string;
-  @Column({name: "external_id"})
+  @AutoMap()
+  @Column({
+    name: "status",
+    type: "enum",
+    enum: ProductStatus,
+    default: ProductStatus.DRAFT
+  })
+  status: ProductStatus;
+  @AutoMap()
+  @Column({name: "external_id", nullable: true})
   externalId: string;
-  @Column({name: "deleted_at"})
+  @AutoMap()
+  @Column({name: "deleted_at", nullable: true})
   deletedAt: Date; 
 }

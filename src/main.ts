@@ -29,4 +29,7 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
-bootstrap();
+bootstrap()
+  .catch((e) => {
+    console.log(`Server encounted exception ${e}`)
+  });
