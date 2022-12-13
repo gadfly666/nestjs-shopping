@@ -38,4 +38,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## TODO
+
+- [x] Register, Authentication
+- [x] CRUD Product
+- [x] CRUD Customer
+- [x] CRUD Gift Card
+- [x] CRUD Discount
+- [x] CRUD Collection
+- [x] CRUD Customer
+- [x] CRUD Collection
+- [ ] CRUD Cart
+- [ ] CRUD Order
+- [ ] CRUD Shipment
