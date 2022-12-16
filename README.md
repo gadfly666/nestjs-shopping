@@ -52,19 +52,19 @@ In this project I'll consider DTO as an anti-pattern and try to work around it.
 
 - [x] Register, Authentication
 - [x] CRUD Product
- - [x] CRUD with Type and Options
- - [ ] Add, Update, Remove Product Options
- - [ ] Remove product type
+  - [x] CRUD with Type and Options
+  - [ ] Add, Update, Remove Product Options
+  - [ ] Remove product type
 - [x] CRUD Customer
 - [x] CRUD Gift Card
 - [x] CRUD Discount
 - [x] CRUD Collection
- - [ ] Add product to collection
+  - [ ] Add product to collection
 - [x] CRUD Customer
 - [x] CRUD Collection
 - [ ] CRUD Cart
 - [ ] CRUD Order
 - [ ] CRUD Shipment
 - [ ] Elastic Search
- - [ ] Connect and Indexing
- - [ ] API
+  - [ ] Connect and Indexing
+  - [ ] API
