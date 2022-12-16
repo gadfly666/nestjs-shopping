@@ -38,16 +38,32 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## NOTES
+
+In this project I'll consider DTO as an anti-pattern and try to work around it.
+
+# TLDR
+
+- [DTO Anti-pattern](https://stackoverflow.com/questions/1440952/why-are-data-transfer-objects-dtos-an-anti-pattern)
+- [DTO work around](https://blog.devgenius.io/code-smell-40-dtos-ca35f5d8f7c9)
+
+
 ## TODO
 
 - [x] Register, Authentication
 - [x] CRUD Product
+ - [x] CRUD with Type and Options
+ - [ ] Add, Update, Remove Product Options
 - [x] CRUD Customer
 - [x] CRUD Gift Card
 - [x] CRUD Discount
 - [x] CRUD Collection
+ - [ ] Add product to collection
 - [x] CRUD Customer
 - [x] CRUD Collection
 - [ ] CRUD Cart
 - [ ] CRUD Order
 - [ ] CRUD Shipment
+- [ ] Elastic Search
+ - [ ] Connect and Indexing
+ - [ ] API

@@ -1,7 +1,7 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper, MappingProfile, createMap, forMember, ignore, condition } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { ProductDto } from './product.dto';
+import { ProductInput } from './product.dto';
 import { Product } from './product.entity';
 
 @Injectable()
@@ -13,11 +13,10 @@ export class ProductProfile extends AutomapperProfile {
 
   override get profile(): MappingProfile {
     return (mapper) => {
-      createMap(mapper, Product, ProductDto);
-      createMap(mapper, ProductDto, Product,
+      createMap(mapper, Product, ProductInput);
+      createMap(mapper, ProductInput, Product,
         forMember((p) => p.id, ignore()),
         forMember((p) => p.profileId, condition((s) => !(s.profileId == null))),
-        forMember((p) => p.typeId, condition((s) => !(s.typeId == null))),
         forMember((p) => p.collectionId, condition((s) => !(s.collectionId == null))),
         forMember((p) => p.createdAt, ignore()),
         forMember((p) => p.updatedAt, ignore()),

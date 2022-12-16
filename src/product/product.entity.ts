@@ -1,5 +1,5 @@
 import { AutoMap } from "@automapper/classes";
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
 // TODO archive table instead of status
@@ -8,55 +8,43 @@ export enum ProductStatus {
   PROPOSED = "proposed",
   PUBLISHED = "published",
   REJECTED = "rejected",
-  DELTED = "deleted",
+  DELETED = "deleted",
 }
 
 @Entity({name: "products"})
 export class Product extends AbstractEntity {
-  @AutoMap()
   @PrimaryGeneratedColumn({name: "id", type: "bigint"})
   id: bigint;
-  @AutoMap()
   @Column({name: "title", nullable: true})
   title: string;
-  @AutoMap()
   @Column({name: "subtitle", nullable: true})
   subtitle: string;
-  @AutoMap()
   @Column({name: "description", nullable: true})
   description: string;
-  @AutoMap()
-  @Column({name: "thumbnail"})
+  @Column({name: "thumbnail", nullable: true})
   thumbnail: string;
-  @AutoMap()
   @Column({name: "profile_id", nullable: true})
-  // ID of the shipping profile that the product belong tos
+  // ID of the shipping profile that the product belong to
   profileId: string;
-  @AutoMap()
   @Column({name: "weight", type:'bigint'})
   weight: bigint;
-  @AutoMap()
   @Column({name: "height", type: 'bigint'})
   height: bigint;
-  @AutoMap()
   @Column({name: "width", type: 'bigint'})
   width: bigint;
-  @AutoMap()
   @Column({name: "hs_code", nullable: true})
   hsCode: string;
-  @AutoMap()
   @Column({name: "mid_code", nullable: true})
   midCode: string;
-  @AutoMap()
   @Column({name: "material", nullable: true})
   material: string;
-  @AutoMap()
   @Column({name: "collection_id", nullable: true})
   collectionId: string;
-  @AutoMap()
   @Column({name: "type_id", nullable: true})
-  typeId: string;
-  @AutoMap()
+  typeId: bigint;
+  @OneToOne(() => ProductType, {lazy: true})
+  @JoinColumn({name: "type_id", referencedColumnName: "id"})
+  type: ProductType;
   @Column({
     name: "status",
     type: "enum",
@@ -64,10 +52,37 @@ export class Product extends AbstractEntity {
     default: ProductStatus.DRAFT
   })
   status: ProductStatus;
-  @AutoMap()
+  @Column({name: "images", array: true})
+  images: string[];
   @Column({name: "external_id", nullable: true})
   externalId: string;
-  @AutoMap()
+  @OneToMany(() => ProductOption, (option) => option.product, {lazy: true})
+  options: ProductOption[];
   @Column({name: "deleted_at", nullable: true})
   deletedAt: Date; 
+}
+
+@Entity({name: "product_options"})
+export class ProductOption {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "product_id"})
+  productId: bigint;
+  @ManyToOne(() => Product, {lazy: true})
+  @JoinColumn({name: "product_id", referencedColumnName: "id"})
+  product: Product
+  @Column({name: "title"})
+  title: string;
+  @Column({name: "metadata", nullable: true})
+  metadata: Record<string, any>;
+}
+
+@Entity({name: "product_types"})
+export class ProductType {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "value"})
+  value: string;
+  @OneToOne(() => Product, (product) => product.type, {lazy: true})
+  product: Product;
 }

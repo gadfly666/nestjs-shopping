@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, Res, Inject, HttpStatus } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ProductDto } from './product.dto';
+import { ProductInput } from './product.dto';
 import { ProductService } from './product.service';
 
 @ApiTags('Product')
@@ -11,23 +11,23 @@ export class ProductController {
     private service: ProductService,
   ) {}  
 
-  @ApiOkResponse({type: ProductDto})
+  @ApiOkResponse({type: ProductInput})
   @Post()
-  async create(@Body() dto: ProductDto): Promise<ProductDto> {
+  async create(@Body() dto: ProductInput): Promise<ProductInput> {
     return this.service.create(dto);
   }
 
-  @ApiOkResponse({type: ProductDto})
+  @ApiOkResponse({type: ProductInput})
   @ApiParam({name: 'id', type: 'number'})
   @Get(':id')
-  async retrieve(@Param('id') id: bigint): Promise<ProductDto> {
+  async retrieve(@Param('id') id: bigint): Promise<ProductInput> {
     return await this.service.retrieve(id);
   }
 
-  @ApiOkResponse({type: ProductDto})
+  @ApiOkResponse({type: ProductInput})
   @ApiParam({name: 'id', type: 'number'})
   @Put(':id')
-  async update(@Param('id') id: bigint, @Body() dto: ProductDto): Promise<ProductDto> {
+  async update(@Param('id') id: bigint, @Body() dto: ProductInput): Promise<ProductInput> {
     return await this.service.update(id, dto);
   }
 
