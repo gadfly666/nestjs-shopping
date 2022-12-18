@@ -1,14 +1,13 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Not, OptimisticLockVersionMismatchError, Repository } from 'typeorm';
+import { Not,Repository } from 'typeorm';
 import { Product, ProductStatus, ProductType, ProductOption } from './product.entity';
 import { ProductInput, ProductOptionInput } from './product.input';
-import { Mapper } from '@automapper/core';
-import { InjectMapper } from '@automapper/nestjs';
-import { type } from 'os';
 
 @Injectable()
 export class ProductService {
+
+  private readonly logger = new Logger(ProductService.name);
 
   constructor(
     @InjectRepository(Product)
@@ -17,7 +16,6 @@ export class ProductService {
     private productTypeRepository: Repository<ProductType>,
     @InjectRepository(ProductOption)
     private productOptionRepository: Repository<ProductOption>,
-    private readonly logger: Logger,
   ) {}
 
   async create(input: ProductInput): Promise<Product> {
@@ -163,8 +161,8 @@ export class ProductService {
 
     if (!option) {
       throw new NotFoundException({
-        "productId": productId,
-        "optionId": optionId
+        productId: productId,
+        optionId: optionId
       });
     }
 

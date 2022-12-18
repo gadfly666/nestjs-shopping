@@ -1,4 +1,4 @@
-import { Injectable, Inject, NestMiddleware, Logger} from '@nestjs/common';
+import { Injectable, NestMiddleware, Logger} from '@nestjs/common';
 // import { Logger } from 'winston';
 // import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';``
 import { Request, Response, NextFunction } from 'express'
@@ -6,8 +6,9 @@ import { Request, Response, NextFunction } from 'express'
 @Injectable()
 export class RequestLogMiddleware implements NestMiddleware {
 
+  private readonly logger = new Logger(RequestLogMiddleware.name);
+
   constructor(
-    private logger: Logger 
     // @Inject(WINSTON_MODULE_NEST_PROVIDER) private logger: Logger 
   ){}
 

@@ -1,5 +1,4 @@
-import { AutoMap } from "@automapper/classes";
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
 // TODO archive table instead of status
@@ -9,6 +8,31 @@ export enum ProductStatus {
   PUBLISHED = "published",
   REJECTED = "rejected",
   DELETED = "deleted",
+}
+
+@Entity({name: "product_options"})
+export class ProductOption {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "product_id"})
+  productId: bigint;
+  @ManyToOne(() => Product, {lazy: true})
+  @JoinColumn({name: "product_id", referencedColumnName: "id"})
+  product: Relation<Product>;
+  @Column({name: "title"})
+  title: string;
+  @Column({name: "metadata", nullable: true, type: "jsonb"})
+  metadata: Record<string, any>;
+}
+
+@Entity({name: "product_types"})
+export class ProductType {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "value"})
+  value: string;
+  @OneToOne(() => Product, (product) => product.type, {lazy: true})
+  product: Relation<Product>;
 }
 
 @Entity({name: "products"})
@@ -52,7 +76,7 @@ export class Product extends AbstractEntity {
     default: ProductStatus.DRAFT
   })
   status: ProductStatus;
-  @Column({name: "images", array: true})
+  @Column({name: "images", array: true, type: "varchar", default: []})
   images: string[];
   @Column({name: "external_id", nullable: true})
   externalId: string;
@@ -60,29 +84,4 @@ export class Product extends AbstractEntity {
   options: ProductOption[];
   @Column({name: "deleted_at", nullable: true})
   deletedAt: Date; 
-}
-
-@Entity({name: "product_options"})
-export class ProductOption {
-  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
-  id: bigint;
-  @Column({name: "product_id"})
-  productId: bigint;
-  @ManyToOne(() => Product, {lazy: true})
-  @JoinColumn({name: "product_id", referencedColumnName: "id"})
-  product: Product
-  @Column({name: "title"})
-  title: string;
-  @Column({name: "metadata", nullable: true})
-  metadata: Record<string, any>;
-}
-
-@Entity({name: "product_types"})
-export class ProductType {
-  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
-  id: bigint;
-  @Column({name: "value"})
-  value: string;
-  @OneToOne(() => Product, (product) => product.type, {lazy: true})
-  product: Product;
 }

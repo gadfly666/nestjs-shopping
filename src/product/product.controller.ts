@@ -1,8 +1,9 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, Res, Inject, HttpStatus } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ProductInput } from './product.input';
+import { ProductInput, ProductOptionInput } from './product.input';
 import { ProductService } from './product.service';
+import { Product } from './product.entity';
 
 @ApiTags('Product')
 @Controller('product')
@@ -11,20 +12,20 @@ export class ProductController {
     private service: ProductService,
   ) {}  
 
-  @ApiOkResponse({type: ProductInput})
+  @ApiOkResponse({type: Product})
   @Post()
   async create(@Body() dto: ProductInput): Promise<ProductInput> {
     return this.service.create(dto);
   }
 
-  @ApiOkResponse({type: ProductInput})
+  @ApiOkResponse({type: Product})
   @ApiParam({name: 'id', type: 'number'})
   @Get(':id')
   async retrieve(@Param('id') id: bigint): Promise<ProductInput> {
     return await this.service.retrieve(id);
   }
 
-  @ApiOkResponse({type: ProductInput})
+  @ApiOkResponse({type: Product})
   @ApiParam({name: 'id', type: 'number'})
   @Put(':id')
   async update(@Param('id') id: bigint, @Body() dto: ProductInput): Promise<ProductInput> {

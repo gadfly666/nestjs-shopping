@@ -6,9 +6,11 @@ import { Response } from 'express';
 @Catch()
 class SystemExceptionFilter implements ExceptionFilter {
 
+  private readonly logger = new Logger(SystemExceptionFilter.name);
+
   constructor(
     // @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger
-    private readonly logger: Logger
+    // private readonly logger: Logger
   ) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
@@ -16,6 +18,7 @@ class SystemExceptionFilter implements ExceptionFilter {
     this.logger.error(`Exceptions: ${exception}`)
 
     if (exception instanceof HttpException) {
+      
       const response = (exception.getResponse() instanceof Object) ? <Object> exception.getResponse() : {statusCode: exception.getStatus(), message: exception.message} 
 
       ctx.getResponse<Response>()
