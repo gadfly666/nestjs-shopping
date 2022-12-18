@@ -55,6 +55,8 @@ In this project I'll consider DTO as an anti-pattern and try to work around it.
   - [x] CRUD with Type and Options
   - [x] Add, Update, Remove Product Options
   - [ ] Remove product type
+  - [ ] CRUD variants
+  - [ ] CRUD review, ratings 
 - [x] CRUD Customer
 - [x] CRUD Gift Card
 - [x] CRUD Discount
