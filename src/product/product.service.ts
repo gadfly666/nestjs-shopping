@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Not, Repository } from 'typeorm';
+import { DeepPartial, Not, OptimisticLockVersionMismatchError, Repository } from 'typeorm';
 import { Product, ProductStatus, ProductType, ProductOption } from './product.entity';
-import { ProductInput } from './product.input';
+import { ProductInput, ProductOptionInput } from './product.input';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { type } from 'os';
@@ -109,7 +109,7 @@ export class ProductService {
   }
   
 
-  async delete(id: bigint) {
+  async delete(id: bigint): Promise<void> {
     const product = await this.productRepository.findOne({
       where: {
         "id": id,
@@ -122,6 +122,76 @@ export class ProductService {
       product.deletedAt = new Date();
       await this.productRepository.save(product);
     }
+
+    // ?
+    return Promise.resolve()
+  }
+
+  async addOption(productId: bigint, optionInput: ProductOptionInput): Promise<Product> {
+
+    const product = await this.productRepository.findOne({
+      where: {
+        "id": productId
+      },
+      relations: ["options"]
+    });
+
+    if (!product) {
+      throw new NotFoundException({
+        "productId": productId
+      });
+    }
+
+    if (product.options.find((o) => o.title !== optionInput.title)) {
+      const option = this.productOptionRepository.create({...optionInput});
+      await this.productOptionRepository.save(option);
+    }
+    
+    return await this.retrieve(productId);
+
+  }
+
+  async updateOption(productId: bigint, optionId: bigint, optionInput: ProductOptionInput): Promise<Product> {
+
+    let option = await this.productOptionRepository.findOne({
+      where: {
+        "id": optionId,
+        "productId": productId
+      },
+      relations: ["product"]
+    });
+
+    if (!option) {
+      throw new NotFoundException({
+        "productId": productId,
+        "optionId": optionId
+      });
+    }
+
+    if (option.product.options.find((o) => (o.title !== optionInput.title))) {
+      option.title = optionInput.title;
+      option.metadata = optionInput.metadata;
+      await this.productOptionRepository.save(option);
+    }
+
+    return await this.retrieve(productId);
+  }
+
+  async deleteOption(productId: bigint, optionId: bigint, optionInput: ProductOptionInput): Promise<void> {
+    
+    let option = await this.productOptionRepository.findOne({
+      where: {
+        "id": optionId,
+        "productId": productId
+      },
+      relations: ["product"]
+    });
+
+    if (option) {
+      await this.productOptionRepository.remove(option);
+    }
+    
+    return Promise.resolve();
   }
 
 }

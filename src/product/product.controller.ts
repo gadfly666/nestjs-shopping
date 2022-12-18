@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, Res, Inject, HttpStatus } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { ProductInput } from './product.dto';
+import { ProductInput } from './product.input';
 import { ProductService } from './product.service';
 
 @ApiTags('Product')

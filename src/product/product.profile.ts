@@ -1,7 +1,7 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { Mapper, MappingProfile, createMap, forMember, ignore, condition } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { ProductInput } from './product.dto';
+import { ProductInput } from './product.input';
 import { Product } from './product.entity';
 
 @Injectable()
