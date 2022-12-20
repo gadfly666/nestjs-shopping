@@ -68,6 +68,7 @@ In this project I'll consider DTO as an anti-pattern and try to work around it.
 - [ ] CRUD Order
 - [ ] CRUD Shipment
 - [ ] Elastic Search
+  - [x] Docker compose
   - [ ] Connect and Indexing
   - [ ] API
 - [ ] Debezium
