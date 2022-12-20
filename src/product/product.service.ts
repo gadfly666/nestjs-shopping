@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not,Repository } from 'typeorm';
-import { Product, ProductStatus, ProductType, ProductOption } from './product.entity';
-import { ProductInput, ProductOptionInput } from './product.input';
+import { Product, ProductStatus, ProductType, ProductOption, ProductVariant, MoneyAmount } from './product.entity';
+import { ProductInput, ProductOptionInput, ProductVariantInput } from './product.input';
+import { privateDecrypt } from 'crypto';
+import { resourceLimits } from 'worker_threads';
 
 @Injectable()
 export class ProductService {
@@ -16,6 +18,10 @@ export class ProductService {
     private productTypeRepository: Repository<ProductType>,
     @InjectRepository(ProductOption)
     private productOptionRepository: Repository<ProductOption>,
+    @InjectRepository(ProductVariant)
+    private productVariantRepository: Repository<ProductVariant>,
+    @InjectRepository(MoneyAmount)
+    private moneyAmountRepository: Repository<MoneyAmount>,
   ) {}
 
   async create(input: ProductInput): Promise<Product> {
@@ -175,7 +181,7 @@ export class ProductService {
     return await this.retrieve(productId);
   }
 
-  async deleteOption(productId: bigint, optionId: bigint, optionInput: ProductOptionInput): Promise<void> {
+  async deleteOption(productId: bigint, optionId: bigint): Promise<void> {
     
     let option = await this.productOptionRepository.findOne({
       where: {
@@ -189,6 +195,83 @@ export class ProductService {
       await this.productOptionRepository.remove(option);
     }
     
+    return Promise.resolve();
+  }
+
+  async createVariant(id: bigint, input: ProductVariantInput): Promise<ProductVariant> {
+    const product = await this.productRepository.findOne({
+      where: {
+        "id": id 
+      },
+      relations: ["variants"]
+    });
+
+    if (!product) {
+      throw new NotFoundException({
+        "productId": id 
+      });
+    }
+
+    const {prices, ...rest} = input;
+
+    if (!rest.variantRank) {
+      rest.variantRank = BigInt(product.variants.length);
+    }
+
+    let variant = this.productVariantRepository.create({...rest, productId: product.id})
+    variant = await this.productVariantRepository.save(variant);
+
+    if (prices) {
+      for (let price of prices) {
+        price = this.moneyAmountRepository.create({...price, variantId: variant.id})
+        await this.moneyAmountRepository.save(price)
+      }
+    }
+
+    return variant;
+  }
+
+  async updateVariant(productId: bigint, variantId: bigint, input: ProductVariantInput): Promise<ProductVariant> {
+    let variant = await this.productVariantRepository.findOne({
+      where: {
+        "id": variantId,
+        "productId": productId  
+      },
+      relations: ["prices"]
+    });
+
+    if (!variant) {
+      throw new NotFoundException({
+        "variantId": variantId 
+      });
+    }
+
+    const {prices, ...rest} = input;
+
+
+    for (const [key, value] of Object.entries(rest)) {
+      variant[key] = value
+    }
+
+    // TODO update variant prices
+    variant = await this.productVariantRepository.save(variant);
+    return variant;
+  }
+
+  async deleteVariant(productId: bigint, variantId: bigint): Promise<void> {
+    let variant = await this.productVariantRepository.findOne({
+      where: {
+        "id": variantId,
+        "productId": productId
+      },
+      relations: ["prices"]
+    });
+
+    if (variant) {
+     variant.deletedAt = new Date();
+     await this.productVariantRepository.save(variant);
+    }
+
     return Promise.resolve();
   }
 

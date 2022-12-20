@@ -49,3 +49,26 @@ export class ProductInput {
   @ApiProperty({type: [String]})
   images: string[];
 }
+
+export class MoneyAmountInput {
+  id: bigint;
+  amount: bigint;
+}
+
+export class ProductVariantInput {
+  title: string;
+  sku: string;
+  barcode: string;
+  ean: string;
+  upc: string;
+  variantRank: bigint;
+  inventoryQuantity: bigint;
+  hsCode: string;
+  midCode: string;
+  material: string;
+  weight: bigint;
+  height: bigint;
+  lengh: bigint;
+  width: bigint;
+  prices: MoneyAmountInput[];
+}

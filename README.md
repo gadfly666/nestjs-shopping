@@ -55,7 +55,7 @@ In this project I'll consider DTO as an anti-pattern and try to work around it.
   - [x] CRUD with Type and Options
   - [x] Add, Update, Remove Product Options
   - [ ] Remove product type
-  - [ ] CRUD variants
+  - [x] CRUD variants
   - [ ] CRUD review, ratings 
 - [x] CRUD Customer
 - [x] CRUD Gift Card
@@ -70,3 +70,7 @@ In this project I'll consider DTO as an anti-pattern and try to work around it.
 - [ ] Elastic Search
   - [ ] Connect and Indexing
   - [ ] API
+- [ ] Debezium
+  - [ ] Docker and oplog sync
+
+

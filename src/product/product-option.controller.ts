@@ -30,4 +30,11 @@ export class ProductOptionController {
     return this.service.updateOption(id, optionId, input);
   }
 
+  @ApiParam({name: "id", type: "number"})
+  @ApiParam({name: "option_id", type: "number"})
+  @Put(':id/options/:option_id')
+  async deleteOption(@Param('id') id: bigint, @Param('option_id') optionId: bigint) {
+    return this.service.deleteOption(id, optionId);
+  }
+
 }

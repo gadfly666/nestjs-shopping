@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation} from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
 // TODO archive table instead of status
@@ -11,7 +11,7 @@ export enum ProductStatus {
 }
 
 @Entity({name: "product_options"})
-export class ProductOption {
+export class ProductOption extends AbstractEntity {
   @PrimaryGeneratedColumn({name: "id", type: "bigint"})
   id: bigint;
   @Column({name: "product_id"})
@@ -26,7 +26,7 @@ export class ProductOption {
 }
 
 @Entity({name: "product_types"})
-export class ProductType {
+export class ProductType extends AbstractEntity {
   @PrimaryGeneratedColumn({name: "id", type: "bigint"})
   id: bigint;
   @Column({name: "value"})
@@ -82,6 +82,67 @@ export class Product extends AbstractEntity {
   externalId: string;
   @OneToMany(() => ProductOption, (option) => option.product, {lazy: true})
   options: ProductOption[];
+  @OneToMany(() => ProductVariant, (variant) => variant.product, {lazy: true})
+  variants: ProductVariant[];
   @Column({name: "deleted_at", nullable: true})
   deletedAt: Date; 
+}
+
+@Entity({name: "product_variants"})
+export class ProductVariant extends AbstractEntity {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "title", nullable: true})
+  title: string;
+  @Column({name: "product_id", nullable: true})
+  productId: bigint;
+  @ManyToOne(() => Product, {lazy: true})
+  @JoinColumn({name: "product_id"})
+  product: Product;
+  @OneToMany(() => MoneyAmount, (price) => price.variant, {lazy: true})
+  prices: MoneyAmount[];
+  @Column({name: "sku", nullable: true})
+  sku: string;
+  @Column({name: "barcode", nullable: true})
+  barcode: string;
+  @Column({name: "ean", nullable: true})
+  ean: string;
+  @Column({name: "upc", nullable: true})
+  upc: string;
+  @Column({name: "variant_rank", default: 0, type: 'bigint'})
+  varianRank: bigint;
+  @Column({name: "inventory_quantity", type: 'bigint'})
+  inventoryQuantity: bigint;
+  @Column({name: "hs_code", nullable: true})
+  hsCode: string;
+  @Column({name: "mid_code", nullable: true})
+  midCode: string;
+  @Column({name: "material", nullable: true})
+  material: string;
+  @Column({name: "weight", type: "bigint", nullable: true})
+  weight: bigint;
+  @Column({name: "height", type: "bigint", nullable: true})
+  height: bigint;
+  @Column({name: "length", type: "bigint", nullable: true})
+  length: bigint;
+  @Column({name: "width", type: "bigint", nullable: true})
+  width: bigint;
+  // TODO add metadata
+  @Column({name: "deleted_at", nullable: true})
+  deletedAt: Date;
+}
+
+@Entity({name: "money_amounts"})
+export class MoneyAmount extends AbstractEntity {
+  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+  id: bigint;
+  @Column({name: "amount", type: "bigint", nullable: true})
+  amount: bigint;
+  @Column({name: "variant_id", type: "bigint"})
+  variantId: bigint;
+  @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "variant_id" })
+  variant: Relation<ProductVariant>;
 }
