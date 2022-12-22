@@ -1,0 +1,22 @@
+{
+    "name": "shopping-db-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "tasks.max": "1",
+        "database.hostname": "db",
+        "database.port": "5432",
+        "database.user": "posgresql",
+        "database.password": "uiop7890",
+        "database.server.id": "184054",
+        "database.server.name": "shopping",
+        "database.include.list": "products, product_variants, product_options, money_amount",
+        "database.history.kafka.bootstrap.servers": "kafka:9091",
+        "database.history.kafka.topic": "schema-changes.shopping",
+        "table.whitelist": "",
+        "transforms": "route",
+        "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+        "transforms.route.replacement": "$2.$3"
+    }
+}
+
