@@ -40,6 +40,8 @@ export class ProductService {
       product.typeId = type_.id
     }
 
+    product = await this.productRepository.save(product);
+
     // TODO load produtions options to response
     await Promise.all(
       (options ?? []).map(async (option) => {
@@ -56,7 +58,6 @@ export class ProductService {
       product.status = ProductStatus.DRAFT;
     } 
 
-    product = await this.productRepository.save(product);
     return await this.retrieve(product.id);
   }
 

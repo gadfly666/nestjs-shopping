@@ -11,6 +11,8 @@ services:
       - 5432:5432
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - default
 
   redis-stack:
     image: redis/redis-stack-server
@@ -30,14 +32,17 @@ services:
     volumes:
       - zookeeper-data:/data
       - zookeeper-datalog:/datalog  
+    networks:
+      - default
 
   kafka:
     image: confluentinc/cp-kafka:5.4.9
+    platform: linux/amd64
     hostname: kafka
     ports:
      - 9091:9091
     environment:
-     - KAFKA_ADVERTISED_LISTENERS=LISTENER_DOCKER_INTERNAL://kafka:19091,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9091
+     - KAFKA_ADVERTISED_LISTENERS=LISTENER_DOCKER_INTERNAL://kafka:9091,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9091
      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
      - KAFKA_INTER_BROKER_LISTENER_NAME=LISTENER_DOCKER_INTERNAL
      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
@@ -47,22 +52,23 @@ services:
       - kafka-data:/var/lib/kafka/data 
     depends_on:
       - zookeeper 
-
+    networks:
+      - default
 
   jdbc-connect:
     image: debezium/connect-jdbc-es:1.9
     container_name: hellojob_kafka_connector
     build:
-      context: debezium-jdbc-es
+      context: connectors
       args:
         DEBEZIUM_VERSION: 1.9
     networks:
-      - hellojob-network    
+      - default   
     ports:
      - 8083:8083
      - 5005:5005
     environment:
-     - BOOTSTRAP_SERVERS=kafka1:19091,kafka2:19092,kafka3:19093
+     - BOOTSTRAP_SERVERS=kafka:9091
      - GROUP_ID=1
      - CONFIG_STORAGE_TOPIC=my_connect_configs
      - OFFSET_STORAGE_TOPIC=my_connect_offsets
@@ -95,6 +101,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    networks:
+      - default
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.6
@@ -105,6 +113,8 @@ services:
       - ELASTICSEARCH_HOSTS=http://elastic:9200  
     ports:
       - 5601:5601  
+    networks:
+      - default
 
 
 volumes:
@@ -115,3 +125,6 @@ volumes:
   kafka-data:
   kibana-config:
   kibana-data:
+
+networks:
+  default:

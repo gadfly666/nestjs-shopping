@@ -51,24 +51,41 @@ export class ProductInput {
 }
 
 export class MoneyAmountInput {
+  @ApiProperty()
   id: bigint;
+  @ApiProperty()
   amount: bigint;
 }
 
 export class ProductVariantInput {
+  @ApiProperty()
   title: string;
+  @ApiProperty()
   sku: string;
+  @ApiProperty()
   barcode: string;
+  @ApiProperty()
   ean: string;
+  @ApiProperty()
   upc: string;
+  @ApiProperty()
   variantRank: bigint;
+  @ApiProperty()
   inventoryQuantity: bigint;
+  @ApiProperty()
   hsCode: string;
+  @ApiProperty()
   midCode: string;
+  @ApiProperty()
   material: string;
+  @ApiProperty()
   weight: bigint;
+  @ApiProperty()
   height: bigint;
+  @ApiProperty()
   lengh: bigint;
+  @ApiProperty()
   width: bigint;
+  @ApiProperty({type: [MoneyAmountInput]})
   prices: MoneyAmountInput[];
 }
