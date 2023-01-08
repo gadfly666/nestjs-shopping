@@ -1,14 +1,14 @@
 import { Module, Logger } from '@nestjs/common';
 import { ProductController } from './product.controller';
-import { ProductOptionController } from './product-option.controller';
+import { ProductVariantController } from './product-variant.controller';
 import { ProductProfile } from './product.profile';
 import { ProductService } from './product.service';
-import { MoneyAmount, Product, ProductOption, ProductType, ProductVariant } from './product.entity';
+import { Product, ProductOption, ProductType, ProductVariant, ProductOptionValue } from './product.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductOption, ProductType, ProductVariant, MoneyAmount])], 
+  imports: [TypeOrmModule.forFeature([Product, ProductOption, ProductType, ProductVariant, ProductOptionValue])], 
   providers: [ ProductProfile, ProductService],
-  controllers: [ProductController, ProductOptionController]
+  controllers: [ProductController, ProductVariantController]
 })
 export class ProductModule {}

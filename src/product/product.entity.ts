@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, OneToMany, Relation, PrimaryColumn } from "typeorm";
 import { AbstractEntity } from "../app.entity";
 
 // TODO archive table instead of status
@@ -23,6 +23,8 @@ export class ProductOption extends AbstractEntity {
   title: string;
   @Column({name: "metadata", nullable: true, type: "jsonb"})
   metadata: Record<string, any>;
+  @OneToMany(() => ProductOptionValue, (value) => value.option, {lazy: true})
+  values: ProductOptionValue[];
 }
 
 @Entity({name: "product_types"})
@@ -99,8 +101,9 @@ export class ProductVariant extends AbstractEntity {
   @ManyToOne(() => Product, {lazy: true})
   @JoinColumn({name: "product_id"})
   product: Product;
-  @OneToMany(() => MoneyAmount, (price) => price.variant, {lazy: true})
-  prices: MoneyAmount[];
+  @Column({name: "price", type: 'bigint'})
+  // @OneToMany(() => MoneyAmount, (price) => price.variant, {lazy: true})
+  price: bigint;
   @Column({name: "sku", nullable: true})
   sku: string;
   @Column({name: "barcode", nullable: true})
@@ -130,19 +133,37 @@ export class ProductVariant extends AbstractEntity {
   // TODO add metadata
   @Column({name: "deleted_at", nullable: true})
   deletedAt: Date;
+  @OneToMany(() => ProductOptionValue, (value) => value.variant, {lazy: true})
+  optionValues: ProductOptionValue[];
 }
 
-@Entity({name: "money_amounts"})
-export class MoneyAmount extends AbstractEntity {
-  @PrimaryGeneratedColumn({name: "id", type: "bigint"})
-  id: bigint;
-  @Column({name: "amount", type: "bigint", nullable: true})
-  amount: bigint;
-  @Column({name: "variant_id", type: "bigint"})
+@Entity({name: "product_option_to_variant"})
+export class ProductOptionValue extends AbstractEntity {
+  @PrimaryColumn({name: "option_id", type: "bigint"})
+  optionId: bigint;
+  @PrimaryColumn({name: "variant_id", type: "bigint"})
   variantId: bigint;
-  @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "variant_id" })
-  variant: Relation<ProductVariant>;
+  @Column({name: "value"})
+  value: string;
+  @ManyToOne(() => ProductOption)
+  @JoinColumn({ name: "option_id", referencedColumnName: "id"})
+  option: ProductOption;
+  @ManyToOne(() => ProductVariant)
+  @JoinColumn({ name: "variant_id", referencedColumnName: "id"})
+  variant: ProductVariant;
 }
+
+// @Entity({name: "money_amounts"})
+// export class MoneyAmount extends AbstractEntity {
+//   @PrimaryGeneratedColumn({name: "id", type: "bigint"})
+//   id: bigint;
+//   @Column({name: "amount", type: "bigint", nullable: true})
+//   amount: bigint;
+//   @Column({name: "variant_id", type: "bigint"})
+//   variantId: bigint;
+//   @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
+//     onDelete: "CASCADE",
+//   })
+//   @JoinColumn({ name: "variant_id" })
+//   variant: Relation<ProductVariant>;
+// }
